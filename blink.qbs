@@ -4,7 +4,7 @@ Project{
     name: "blink"
 
     Product{
-        name: "embedend stm32f4"
+        name: "stm32f4"
         Group{
             name: "stm32f4 core sources"
             files: "core/src/*.c"
@@ -19,6 +19,7 @@ Project{
 
         files: [
             "blink.c",
+            "core/stm32f4xx_conf.h",
             "lib/core_cmInstr.h",
             "lib/stm32f4_discovery.c",
             "lib/stm32f4_discovery.h",
@@ -31,16 +32,25 @@ Project{
             name: "cpp"
         }
 
-        cpp.includePaths: ['lib/','core/include/']
+        cpp.includePaths: ['lib/','core/','core/include/']
         cpp.defines: [
                 "STM32F4XX",
                 "STM32F40_41xxx",
                 "HSE_VALUE=168000000",
+                "USE_FULL_ASSERT",
+                "USE_STDPERIPH_DRIVER"
             ]
-        cpp.compilerName: ["arm-none-eabi-gcc"]
-        cpp.compilerPath: ["/usr/bin/arm-none-eabi-gcc"]
-        cpp.commonCompilerFlags: ["-march=cortex-m3"]
-        cpp.architecture: "arm"
+
+        cpp.commonCompilerFlags: ["-g",
+                                  "-O2",
+                                  "-Wall",
+                                  "-Tstm32_flash.ld",
+                                  "-mlittle-endian",
+                                  "-mthumb",
+                                  "-mcpu=cortex-m4",
+                                  "-mthumb-interwork",
+                                  "-mfloat-abi=hard",
+                                  "-mfpu=fpv4-sp-d16"]
 
         Rule{
             inputs: ["с"]
